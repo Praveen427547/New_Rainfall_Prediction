@@ -115,9 +115,10 @@ if influential_state:
         # Using st.write for automatic theme adaptation
         # Using st.markdown without explicit font size, following the theme
         st.markdown(
-             f"<p style='color: var(--text-color);'>{f'The predicted rainfall for {target_state} in {next_month} is: {predicted_value:.2f} mm'}</p>",
-             unsafe_allow_html=True
+            f"<p style='color: var(--text-color); font-weight: bold;'>{f'The predicted rainfall for {target_state} in {next_month} is: {predicted_value:.2f} mm'}</p>",
+            unsafe_allow_html=True
         )
+
 
 
 
