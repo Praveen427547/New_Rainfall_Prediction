@@ -111,7 +111,7 @@ if influential_state:
 
         # Set background image based on the predicted rainfall
         if predicted_value < 200:
-            set_background("https://s.w-x.co/util/image/w/in-rains_11.jpg?crop=16:9&width=980&format=pjpg&auto=webp&quality=60")  # Replace with low rainfall image URL
+            set_background("https://www.cleveland.com/resizer/v2/7TPNT3GG5ZBRXMY7DBJGGPS7EQ.jpg?auth=6a39dd4b9695c068dc473109cc5da36edd2bd09c6702f631af97223762bd458c&width=1280&quality=90")  # Replace with low rainfall image URL
         elif predicted_value > 500:
             set_background("https://s.w-x.co/util/image/w/in-rains_11.jpg?crop=16:9&width=980&format=pjpg&auto=webp&quality=60")  # Replace with high rainfall image URL
         else:
