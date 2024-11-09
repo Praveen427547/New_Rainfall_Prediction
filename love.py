@@ -120,7 +120,7 @@ if influential_state:
         if predicted_value < 200:
             set_background("https://www.cleveland.com/resizer/v2/7TPNT3GG5ZBRXMY7DBJGGPS7EQ.jpg?auth=6a39dd4b9695c068dc473109cc5da36edd2bd09c6702f631af97223762bd458c&width=1280&quality=90")
         elif predicted_value > 500:
-            set_background("https://www.bpmcdn.com/f/files/surrey/september-2024/rain-viz-9.jpg?w=960")
+            set_background("https://cdn.labmanager.com/assets/articleNo/31834/aImg/56785/air-pollution-hides-increases-in-rainfall-m.webp")
         else:
             set_background("https://s.w-x.co/util/image/w/in-mumbai_rain_0.jpg?width=980")
 else:
