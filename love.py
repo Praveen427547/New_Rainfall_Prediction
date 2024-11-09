@@ -1,18 +1,16 @@
-# rainfall_dashboard.py
-
 import streamlit as st
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 
 # Load the Excel data
-data = pd.read_excel('love.xlsx')
+data = pd.read_excel('love.xlsx', engine='openpyxl')
 
 # Convert Date column to datetime format and create year and month features
 data['Date'] = pd.to_datetime(data['Date'])
 data['Year'] = data['Date'].dt.year
 data['Month'] = data['Date'].dt.month
 
-# Define target-influential state pairs with the exact case
+# Define target-influential state pairs
 state_pairs = {
     'Arunachal Pradesh': 'Bihar',
     'Orissa': 'Andhra Pradesh',
@@ -41,11 +39,10 @@ state_pairs = {
     'Karnataka': 'Andhra Pradesh',
     'Kerala': 'Lakshadweep',
     'Maharashtra': 'Gujarat',
-
 }
 
 # Streamlit App
-st.title("Rainfall Prediction Tool")
+st.title("Praveen's Rainfall Prediction Tool")
 
 # Select target state
 target_state = st.selectbox("Select the target state you want to predict rainfall for:", options=list(state_pairs.keys()))
@@ -86,6 +83,22 @@ if influential_state:
 
     random_value = st.number_input(f"Enter rainfall value for {influential_state} in {input_month}:", min_value=0.0)
 
+    # Define background images based on predicted rainfall
+    def set_background(image_url):
+        st.markdown(
+            f"""
+            <style>
+            .stApp {{
+                background-image: url({image_url});
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }}
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+
     # Predict the next month's value for the target state
     if st.button("Predict Next Month's Rainfall"):
         predicted_value = max(model.predict([[month_num, random_value]])[0], 0)
@@ -95,5 +108,13 @@ if influential_state:
 
         # Display the prediction
         st.write(f"The predicted rainfall for {target_state} in {next_month} is: {predicted_value:.2f} mm")
+
+        # Set background image based on the predicted rainfall
+        if predicted_value < 200:
+            set_background("https://example.com/low_rainfall_image.jpg")  # Replace with low rainfall image URL
+        elif predicted_value > 500:
+            set_background("https://s.w-x.co/util/image/w/in-rains_11.jpg?crop=16:9&width=980&format=pjpg&auto=webp&quality=60")  # Replace with high rainfall image URL
+        else:
+            set_background("https://example.com/normal_rainfall_image.jpg")  # Replace with normal rainfall image URL
 else:
     st.write("No influential state found for the selected target state. Please choose another state.")
