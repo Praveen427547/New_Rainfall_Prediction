@@ -59,7 +59,8 @@ target_state = st.selectbox("Select the target state you want to predict rainfal
 influential_state = state_pairs.get(target_state)
 
 if influential_state:
-    st.markdown(style_text(f"Using {influential_state} as the influential state for {target_state}."), unsafe_allow_html=True)
+    st.write(f"Using **{influential_state}** as the influential state for **{target_state}**.")
+
 
     # Prepare data for prediction
     data['Next_Month_Value'] = data[target_state].shift(-1)
