@@ -112,10 +112,9 @@ if influential_state:
         next_month = reverse_month_mapping[next_month_num]
 
         # Display the prediction with styled text
-        st.markdown(
-            style_text(f"The predicted rainfall for {target_state} in {next_month} is: {predicted_value:.2f} mm"),
-            unsafe_allow_html=True
-        )
+        # Using st.write for automatic theme adaptation
+st.write(f"### The predicted rainfall for **{target_state}** in **{next_month}** is: **{predicted_value:.2f} mm**")
+
 
         # Set background image based on the predicted rainfall
         if predicted_value < 200:
