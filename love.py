@@ -113,7 +113,12 @@ if influential_state:
 
         # Display the prediction with styled text
         # Using st.write for automatic theme adaptation
-        st.write(f"### The predicted rainfall for **{target_state}** in **{next_month}** is: **{predicted_value:.2f} mm**")
+        # Using st.markdown without explicit font size, following the theme
+        st.markdown(
+             f"<p style='color: var(--text-color);'>{f'The predicted rainfall for {target_state} in {next_month} is: {predicted_value:.2f} mm'}</p>",
+             unsafe_allow_html=True
+        )
+
 
 
         # Set background image based on the predicted rainfall
