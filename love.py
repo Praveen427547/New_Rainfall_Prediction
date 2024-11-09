@@ -115,6 +115,6 @@ if influential_state:
         elif predicted_value > 500:
             set_background("https://s.w-x.co/util/image/w/in-rains_11.jpg?crop=16:9&width=980&format=pjpg&auto=webp&quality=60")  # Replace with high rainfall image URL
         else:
-            set_background("https://s.w-x.co/util/image/w/in-rains_11.jpg?crop=16:9&width=980&format=pjpg&auto=webp&quality=60")  # Replace with normal rainfall image URL
+            set_background("https://s.w-x.co/util/image/w/in-mumbai_rain_0.jpg?crop=16:9&width=980&format=pjpg&auto=webp&quality=60")  # Replace with normal rainfall image URL
 else:
     st.write("No influential state found for the selected target state. Please choose another state.")
