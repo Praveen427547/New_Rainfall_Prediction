@@ -44,32 +44,37 @@ state_pairs = {
 # Streamlit App
 st.title("Praveen's Rainfall Prediction Tool")
 
+# Check if dark mode is enabled using Streamlit's theme settings
+dark_mode = st.get_option("theme.base") == "dark"
+
+# Define text colors based on mode
+text_color = "#FFFFFF" if dark_mode else "#000000"
+
+# Apply styles for text color
+def style_text(text):
+    return f"<span style='color: {text_color};'>{text}</span>"
+
 # Select target state
 target_state = st.selectbox("Select the target state you want to predict rainfall for:", options=list(state_pairs.keys()))
 influential_state = state_pairs.get(target_state)
 
 if influential_state:
-    st.write(f"Using {influential_state} as the influential state for {target_state}.")
+    st.markdown(style_text(f"Using {influential_state} as the influential state for {target_state}."), unsafe_allow_html=True)
 
-    # Create pairs of consecutive months across years
+    # Prepare data for prediction
     data['Next_Month_Value'] = data[target_state].shift(-1)
     data['Next_Month'] = data['Date'].shift(-1).dt.month
     data['Next_Year'] = data['Date'].shift(-1).dt.year
-
-    # Filter only consecutive month pairs
-    valid_pairs = data.copy()
-    valid_pairs['Is_Consecutive'] = (
-        ((valid_pairs['Month'] + 1) % 12 == valid_pairs['Next_Month']) &
-        ((valid_pairs['Month'] == 12) & (valid_pairs['Next_Year'] == valid_pairs['Year'] + 1) |
-         (valid_pairs['Month'] != 12) & (valid_pairs['Next_Year'] == valid_pairs['Year']))
+    data['Is_Consecutive'] = (
+        ((data['Month'] + 1) % 12 == data['Next_Month']) &
+        ((data['Month'] == 12) & (data['Next_Year'] == data['Year'] + 1) |
+         (data['Month'] != 12) & (data['Next_Year'] == data['Year']))
     )
-    valid_pairs = valid_pairs[valid_pairs['Is_Consecutive']]
+    valid_pairs = data[data['Is_Consecutive']]
 
     # Prepare data for Linear Regression
     X = valid_pairs[['Month', influential_state]]
     y = valid_pairs['Next_Month_Value']
-
-    # Fit the model
     model = LinearRegression()
     model.fit(X, y)
 
@@ -80,7 +85,6 @@ if influential_state:
     }
     input_month = st.selectbox(f"Select the current month of {influential_state}:", list(month_mapping.keys()))
     month_num = month_mapping[input_month]
-
     random_value = st.number_input(f"Enter rainfall value for {influential_state} in {input_month}:", min_value=0.0)
 
     # Define background images based on predicted rainfall
@@ -106,15 +110,19 @@ if influential_state:
         reverse_month_mapping = {v: k for k, v in month_mapping.items()}
         next_month = reverse_month_mapping[next_month_num]
 
-        # Display the prediction
-        st.write(f"The predicted rainfall for {target_state} in {next_month} is: {predicted_value:.2f} mm")
+        # Display the prediction with styled text
+        st.markdown(
+            style_text(f"The predicted rainfall for {target_state} in {next_month} is: {predicted_value:.2f} mm"),
+            unsafe_allow_html=True
+        )
 
         # Set background image based on the predicted rainfall
         if predicted_value < 200:
-            set_background("https://www.cleveland.com/resizer/v2/7TPNT3GG5ZBRXMY7DBJGGPS7EQ.jpg?auth=6a39dd4b9695c068dc473109cc5da36edd2bd09c6702f631af97223762bd458c&width=1280&quality=90")  # Replace with low rainfall image URL
+            set_background("https://www.cleveland.com/resizer/v2/7TPNT3GG5ZBRXMY7DBJGGPS7EQ.jpg?width=1280&quality=90")
         elif predicted_value > 500:
-            set_background("https://www.bpmcdn.com/f/files/surrey/september-2024/rain-viz-9.jpg;w=960;h=640;bgcolor=000000")  # Replace with high rainfall image URL
+            set_background("https://www.bpmcdn.com/f/files/surrey/september-2024/rain-viz-9.jpg?w=960")
         else:
-            set_background("https://s.w-x.co/util/image/w/in-mumbai_rain_0.jpg?crop=16:9&width=980&format=pjpg&auto=webp&quality=60")  # Replace with normal rainfall image URL
+            set_background("https://s.w-x.co/util/image/w/in-mumbai_rain_0.jpg?width=980")
 else:
-    st.write("No influential state found for the selected target state. Please choose another state.")
+    st.markdown(style_text("No influential state found for the selected target state. Please choose another state."), unsafe_allow_html=True)
+
